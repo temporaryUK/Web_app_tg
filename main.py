@@ -10,6 +10,7 @@ require a bot token.
 """
 import json
 import logging
+import os
 
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, WebAppInfo
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
@@ -22,20 +23,20 @@ logging.basicConfig(
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
-
+BOT_KEY = os.environ.get("API_KEY")
 
 # Define a `/start` command handler.
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message with a button that opens a the web app."""
-    # await update.message.reply_text(
-    #     "Please press the button below to choose a color via the WebApp.",
-    #     reply_markup=ReplyKeyboardMarkup.from_button(
-    #         KeyboardButton(
-    #             text="Open the color picker!",
-    #             web_app=WebAppInfo(url="https://python-telegram-bot.org/static/webappbot"),
-    #         )
-    #     ),
-    # )
+    await update.message.reply_text(
+        "Please press the button below to choose a color via the WebApp.",
+        reply_markup=ReplyKeyboardMarkup.from_button(
+            KeyboardButton(
+                text="Open the color picker!",
+                web_app=WebAppInfo(url="https://python-telegram-bot.org/static/webappbot"),
+            )
+        ),
+    )
 
 
 # Handle incoming WebAppData
@@ -56,7 +57,7 @@ async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
-    application = Application.builder().token("7106952569:AAGfLBA7fZ8QtfYx1yAkAech6dg_gNPHqWk").build()
+    application = Application.builder().token(BOT_KEY).build()
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, web_app_data))
