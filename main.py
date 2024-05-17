@@ -66,5 +66,7 @@ def main() -> None:
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 
+t = "something"
+
 if __name__ == "__main__":
     main()
