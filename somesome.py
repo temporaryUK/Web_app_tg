@@ -1,4 +1,5 @@
 def main(sm):
-  return sm
+    return sm
+
 
 print(main("123"))
